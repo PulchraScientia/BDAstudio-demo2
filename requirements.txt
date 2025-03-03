@@ -1,0 +1,17 @@
+setuptools>=68.0.0
+wheel>=0.40.0
+numpy>=1.26.0
+pandas>=2.0.3
+streamlit==1.31.0
+altair==5.1.2
+plotly==5.18.0
+matplotlib>=3.7.1
+seaborn>=0.12.2
+watchdog==3.0.0
+protobuf>=4.23.3
+pydeck==0.8.0
+python-dateutil==2.8.2
+PyYAML==6.0.1
+requests==2.31.0
+toml==0.10.2
+jsonschema>=4.17.3
