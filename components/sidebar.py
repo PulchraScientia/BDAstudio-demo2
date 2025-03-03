@@ -14,10 +14,10 @@ def render_sidebar():
         
         # Create new workspace
         with st.expander("Create New Workspace"):
-            workspace_name = st.text_input("Workspace Name")
-            workspace_desc = st.text_area("Description")
+            workspace_name = st.text_input("Workspace Name", key="sidebar_ws_name")
+            workspace_desc = st.text_area("Description", key="sidebar_ws_desc")
             
-            if st.button("Create Workspace"):
+            if st.button("Create Workspace", key="sidebar_create_ws"):
                 if workspace_name:
                     new_workspace = {
                         "id": str(uuid.uuid4()),
@@ -35,7 +35,7 @@ def render_sidebar():
         # Select existing workspace
         if st.session_state.workspaces:
             workspace_options = ["Select Workspace"] + [ws["name"] for ws in st.session_state.workspaces]
-            selected_workspace = st.selectbox("Select Workspace", workspace_options)
+            selected_workspace = st.selectbox("Select Workspace", workspace_options, key="sidebar_select_ws")
             
             if selected_workspace != "Select Workspace":
                 for ws in st.session_state.workspaces:
@@ -54,22 +54,30 @@ def render_sidebar():
         
         # Enable other options only if workspace is selected
         if st.session_state.current_workspace:
-            if st.button("🧪 Experiments", use_container_width=True):
+            # Experiments button with toggle functionality
+            exp_btn = st.button("🧪 Experiments", use_container_width=True)
+            if exp_btn:
+                st.session_state.show_experiment_submenu = not st.session_state.get('show_experiment_submenu', False)
                 st.switch_page("pages/02_experiment.py")
-                
-            # Experiment sub-menu
-            with st.expander("Experiment Settings"):
-                if st.button("📊 Datasets", use_container_width=True):
-                    st.session_state.submenu = "datasets"
-                    st.switch_page("pages/02_experiment.py")
-                
-                if st.button("📝 Materials", use_container_width=True):
-                    st.session_state.submenu = "materials"
-                    st.switch_page("pages/02_experiment.py")
             
+            # Experiment sub-menu
+            if st.session_state.get('show_experiment_submenu', False):
+                with st.container():
+                    st.markdown("&nbsp;&nbsp;↳ **Experiment Settings**")
+                    col1, col2 = st.columns([0.2, 0.8])
+                    with col1:
+                        st.write("")
+                    with col2:
+                        if st.button("📊 Datasets", use_container_width=True):
+                            st.switch_page("pages/05_datasets.py")
+                        
+                        if st.button("📝 Materials", use_container_width=True):
+                            st.switch_page("pages/06_materials.py")
+            
+            # Assistants button
             if st.button("🤖 Assistants", use_container_width=True):
                 st.switch_page("pages/03_assistant.py")
-                
+        
         st.divider()
                 
         # Help section

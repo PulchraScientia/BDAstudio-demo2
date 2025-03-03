@@ -1,5 +1,6 @@
 import streamlit as st
 from components.sidebar import render_sidebar
+import utils.session_state as ss
 
 # Page configuration
 st.set_page_config(
@@ -9,21 +10,10 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Initialize session state
-if 'user' not in st.session_state:
-    st.session_state.user = {"name": "Demo User", "email": "demo@example.com"}
-if 'current_workspace' not in st.session_state:
-    st.session_state.current_workspace = None
-if 'workspaces' not in st.session_state:
-    st.session_state.workspaces = []
-if 'experiments' not in st.session_state:
-    st.session_state.experiments = []
-if 'materials' not in st.session_state:
-    st.session_state.materials = []
-if 'datasets' not in st.session_state:
-    st.session_state.datasets = []
-if 'assistants' not in st.session_state:
-    st.session_state.assistants = []
+ss.initialize_session_state()
+
+# Add some demo data for testing
+ss.add_demo_data()
 
 # Main app
 def main():
@@ -35,7 +25,7 @@ def main():
     st.subheader("Natural Language to SQL Assistant Platform")
     
     if not st.session_state.current_workspace:
-        st.info("👈 Please create or select a workspace from the sidebar to get started.")
+        st.info("Please create or select a workspace from the sidebar to get started.")
         
         # Welcome section
         st.markdown("""
