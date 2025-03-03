@@ -146,4 +146,6 @@ else:
 st.divider()
 if st.session_state.selected_dataset:
     if st.button("Create Experiment with Selected Dataset", use_container_width=True):
+        # 실험 페이지로 이동할 때 탭을 "create"로 설정
+        st.session_state.experiment_tab = "create"
         st.switch_page("pages/02_experiment.py")
