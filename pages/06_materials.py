@@ -13,6 +13,14 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# 네비게이션 메뉴 숨기기
+hide_streamlit_style = """
+<style>
+#MainMenu {visibility: hidden;}
+div[data-testid="stSidebarNav"] {display: none;}
+</style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 # Render sidebar
 render_sidebar()

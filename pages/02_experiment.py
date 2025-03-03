@@ -17,6 +17,17 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# 네비게이션 메뉴 숨기기
+hide_streamlit_style = """
+<style>
+#MainMenu {visibility: hidden;}
+div[data-testid="stSidebarNav"] {display: none;}
+</style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
+
+
 # Render sidebar
 render_sidebar()
 
@@ -37,6 +48,10 @@ if 'selected_material' not in st.session_state:
     st.session_state.selected_material = None
     # Clear after navigation
     del st.session_state.submenu
+if 'navigate_to_assistant' not in st.session_state:
+    st.session_state.navigate_to_assistant = False
+
+
 
 # Main experiments page
 st.title("Experiments")
@@ -130,6 +145,9 @@ with tab_create:
             st.session_state.experiment_tab = "list"
             st.success(f"Experiment '{exp_name}' created and executed successfully!")
             st.rerun()
+
+def navigate_to_assistant_page():
+    st.session_state.navigate_to_assistant = True
 
 # Implement experiment list tab
 with tab_list:
@@ -277,9 +295,11 @@ with tab_list:
                     st.session_state.assistants.append(new_assistant)
                     st.success(f"Assistant created from experiment '{selected_exp['name']}'!")
                     
-                    # Offer to navigate to the assistants page
-                    if st.button("Go to Assistants Page"):
-                        st.switch_page("pages/03_assistant.py")
+                    if st.button("Go to Assistants Page", on_click=navigate_to_assistant_page):
+                        pass
+                if st.session_state.navigate_to_assistant:
+                    st.session_state.navigate_to_assistant = False  # 상태 재설정
+                    st.switch_page("pages/03_assistant.py")
             
             with col2:
                 if st.button("Retry Experiment", use_container_width=True):
